@@ -1,0 +1,38 @@
+import java.util.*;
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int low = 1;
+        int high = Arrays.stream(piles).max().getAsInt(); // max pile size
+
+        while (low < high) {
+            int mid = (low + high) / 2;
+            int hours = 0;
+
+            for (int p : piles) {
+                hours += (p + mid - 1) / mid;  // ceil(p/mid)
+            }
+
+            if (hours <= h) {
+                // feasible, try smaller speed
+                high = mid;
+            } else {
+                // too slow, need faster speed
+                low = mid + 1;
+            }
+        }
+
+        return low; // or high (same here)
+    }
+
+    public static void main(String[] args) {
+        int[] piles1 = {3, 6, 7, 11};
+        int[] piles2 = {30, 11, 23, 4, 20};
+
+        Solution sc = new Solution();
+
+        System.out.println(sc.minEatingSpeed(piles1, 8));  // Output: 4
+        System.out.println(sc.minEatingSpeed(piles2, 5));  // Output: 30
+        System.out.println(sc.minEatingSpeed(piles2, 6));  // Output: 23
+    }
+}
